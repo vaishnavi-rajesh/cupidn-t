@@ -4,7 +4,7 @@
 # CUPIDN'T - How universe put together 2 peeps
 
 
-## Basic Details:A tongue-in-cheek dating website where mischievous Cupid delights in matching you with your worst possible match. The more incompatible you are, the closer Cupid puts you to your “perfect” mismatch.
+## Basic Details:A tongue-in-cheek dating website where mischievous Cupid delights in matching you with your worst possible match. The more incompatible you are, the closer Cupid puts you to your “perfect” mismatch. 
 ### Team Name: [Phi]
 
 
@@ -13,7 +13,7 @@
 - Member 2: [Vaishnavi Rajesh] - [LBSITW]
 
 ### Project Description
-[2-3 lines about what your project does] : Cupidn't is a playful, satirical web app where mischievous Cupid deliberately matches users with their most incompatible partners based on an entertaining personality quiz. The worse the compatibility, the closer they put you physically, with snarky commentary and humorous “commitment” roasts adding to the fun.
+[2-3 lines about what your project does] : Cupidn't is a playful, satirical web site where mischievous Cupid deliberately matches users with their most incompatible partners based on an entertaining personality quiz. The worse the compatibility, the closer they put you physically, with snarky commentary and humorous “commitment” roasts adding to the fun.
 It’s a lighthearted parody of dating apps, designed purely for laughs and interactive amusement.
 
 
@@ -134,15 +134,6 @@ How to run: Just open the .html file in any modern browser. No server required.
 In summary:
 Cupidn't is a satirical, SPA-style website built with only HTML, CSS, and JavaScript, featuring custom UI, comical matching, and mischievous Cupid commentary—all in a single self-contained frontend file.
 
-Related
-What are the core architectural components of the implementation
-How does the app handle user data and privacy considerations
-What specific coding patterns or principles are applied in the implementation
-How are features like location-based stories integrated into the code
-What testing methods or frameworks are used to ensure quality
-How does the app handle user data and privacy considerations
-How does the app handle user data and privacy considerations
-Here’s how the Cupidn’t app handles user data and privacy considerations based on the provided implementation:
 
 User Data Handling
 No Accounts or Logins:
@@ -158,36 +149,9 @@ If the user closes or reloads the page, their data is lost—there’s no persis
 
 Optional: You can extend the app to use localStorage for persistence, but by default, it doesn’t.
 
-No Tracking or Analytics:
-No cookies, tracking scripts, analytics, or third-party libraries are used.
-The only remote asset is loading Comic Neue & Kalam fonts from Google Fonts for styling.
 
-Privacy Considerations
-Minimal Data Collected:
 
-Only a non-identifying first name and a gender selection are required.
 
-No email, age (user’s age is randomly generated for jokes), address, or sensitive information is ever requested or kept.
-
-No Data Sharing, Selling, or External Access:
-All logic, generation, and storage are entirely client-side and ephemeral.
-Users’ answers and results never leave their browser.
-
-Intended for Fun, Not Real Romance:
-The app is made clear (in README/FAQs) as a satire and demo—no real-life matches, no communication between users, and no real profiles.
-
-Example Statement (for README or Footer)
-"Cupidn’t is a fully client-side app; your answers never leave your device, and no personal information is stored, shared, or tracked. All matches and profiles are fictional and generated in your own browser session for entertainment only."
-
-Summary:
-Cupidn’t is designed with privacy by default: no persistent data, no network requests, no cookies or analytics, and only in-memory, session-scoped usage of minimal, non-sensitive input. If you wish, you can include an explicit privacy statement in the app or README to reassure users of this stance.
-
-Related
-What privacy policies does this app mention regarding data collection and sharing
-How does the app ensure the security of user data during transmission and storage
-Are there any documented data breaches or security vulnerabilities associated with the app
-What types of personal information are explicitly collected or optionally provided by users
-How transparent is the app about its data handling practices and compliance with privacy laws
 
 
 
@@ -273,9 +237,7 @@ No personal data storage: Only name and gender are collected locally for persona
 
 Client-side only: All user input, fake matches, and logic happen inside the browser; no data is sent or saved externally.
 
-Session-limited data: No local storage or cookies are used, so data is lost on page reload or close.
-
-No tracking or analytics: The app respects user privacy fully.
+Session-limited data: No local storage or cookies are used, so data is lost on page reload or close..
 
 How to Run
 Save the complete HTML file (e.g., cupidnt.html) locally.
@@ -300,12 +262,20 @@ Additional Features: Possibility to add share buttons, more detailed profile pop
 # Screenshots (Add at least 3)
 ![Screenshot1](Add screenshot 1 here with proper name)
 *Add caption explaining what this shows*
+https://drive.google.com/file/d/1J2gLEYowKqvcFlmCOSrtdW3a2napgDxp/view?usp=sharing
+FRONT PAGE/LOGIN.
+
 
 ![Screenshot2](Add screenshot 2 here with proper name)
 *Add caption explaining what this shows*
+https://drive.google.com/file/d/1oui-snhxL0on49nRKcxwMC6JjXgLdxDR/view?usp=sharing
+COMPATIBILITY TEST QUIZES.
+
 
 ![Screenshot3](Add screenshot 3 here with proper name)
 *Add caption explaining what this shows*
+https://drive.google.com/file/d/17amMt8U37-XbvfLQL3Ob8E0qVG77C_AL/view?usp=sharing
+FINAL MATCHED RESULTS.
 
 # Diagrams
 ![Workflow](Add your workflow/architecture diagram here)
