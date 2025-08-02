@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupidn't - Mischievous Dating</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Comic Neue', cursive;
+      background: linear-gradient(135deg, #ff6b9d, #c44569, #f8b500);
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .page {
+      display: none;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+    
+    .page.active {
+      display: block;
+    }
+    
+    h1 {
+      font-size: 3em;
+      color: #c44569;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+      font-size: 2em;
+      color: #ff6b9d;
+      margin-bottom: 15px;
+    }
+    
+    .subtitle {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #c44569;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ff6b9d;
+      border-radius: 10px;
+      font-size: 16px;
+      font-family: inherit;
+      background: white;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #c44569;
+      box-shadow: 0 0 10px rgba(255, 107, 157, 0.3);
+    }
+    
+    .btn {
+      background: linear-gradient(45deg, #ff6b9d, #c44569);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .question-container {
+      background: #f9f9f9;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 15px;
+      border-left: 5px solid #ff6b9d;
+    }
+    
+    .question-text {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .option {
+      background: white;
+      padding: 10px 20px;
+      border: 2px solid #ff6b9d;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    
+    .option:hover {
+      background: #ff6b9d;
+      color: white;
+      transform: scale(1.05);
+    }
+    
+    .option.selected {
+      background: #c44569;
+      color: white;
+      border-color: #c44569;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(45deg, #ff6b9d, #c44569);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    
+    .match-result {
+      background: linear-gradient(135deg, #fff, #f8f8f8);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .compatibility-score {
+      font-size: 3em;
+      font-weight: bold;
+      color: #c44569;
+      margin: 20px 0;
+    }
+    
+    .distance {
+      font-size: 1.5em;
+      color: #ff6b9d;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    
+    .user-cards {
+      display: flex;
+      justify-content: space-around;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    
+    .user-card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border: 3px solid #ff6b9d;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .user-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      color: white;
+      font-weight: bold;
+    }
+    
+    .user-name {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #c44569;
+      margin-bottom: 5px;
+    }
+    
+    .user-age {
+      color: #666;
+      margin-bottom: 10px;
+    }
+    
+    .user-trait {
+      background: #ffe6f2;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      color: #c44569;
+      font-weight: bold;
+    }
+    
+    .cupid-commentary {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 20px 0;
+      position: relative;
+      font-style: italic;
+      font-weight: bold;
+      color: #856404;
+    }
+    
+    .cupid-commentary::before {
+      content: "💘";
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: #fff3cd;
+      padding: 0 10px;
+      font-size: 1.5em;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+    
+    .warning-box {
+      background: linear-gradient(45deg, #ff4757, #c44569);
+      color: white;
+      padding: 20px;
+      border-radius: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    
+    .commitment-badge {
+      background: #ff4757;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 0.8em;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 600px;
+      position: relative;
+      animation: slideIn 0.3s ease;
+    }
+    
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .close:hover {
+      color: #c44569;
+      transform: rotate(90deg);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .custom-alert {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .alert-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      max-width: 400px;
+      margin: 20px;
+      animation: bounceIn 0.5s ease;
+    }
+    
+    .alert-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+    
+    .alert-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #c44569;
+      margin-bottom: 10px;
+    }
+    
+    .alert-message {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    @keyframes bounceIn {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .profile-details {
+      text-align: left;
+      margin: 20px 0;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+    
+    .detail-label {
+      font-weight: bold;
+      color: #c44569;
+    }
+    
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .page {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2em;
+      }
+      
+      .user-cards {
+        flex-direction: column;
+      }
+      
+      .options {
+        flex-direction: column;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Welcome Page -->
+    <div id="welcomePage" class="page active">
+      <h1>💘 Cupidn't 💔</h1>
+      <p class="subtitle">Where love goes wrong... on purpose!</p>
+      <p>Love is overrated.Let's make it awkward!</p>
+      
+      <div class="form-group">
+        <label for="userName">Your Name:</label>
+        <input type="text" id="userName" placeholder="Enter your name" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="userGender">Your Gender:</label>
+        <select id="userGender" required>
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      
+      <button class="btn" onclick="startTest()">Begin My Romantic Doom</button>
+    </div>
+
+    <!-- Compatibility Test Page -->
+    <div id="testPage" class="page">
+      <h2>💔 Compatibility Test of Doom</h2>
+      <p class="subtitle">Answer honestly... Cupid will use this against you!</p>
+      
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p id="progressText">Question 1 of 9</p>
+      
+      <div id="questionsContainer"></div>
+      
+      <div class="action-buttons">
+        <button class="btn" id="prevBtn" onclick="previousQuestion()" style="display: none;">Previous</button>
+        <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+        <button class="btn" id="submitBtn" onclick="calculateResults()" style="display: none;" disabled>Seal My Fate</button>
+      </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page">
+      <h2>😒 Cupidn't's Mismatches</h2>
+      
+      <div class="match-result">
+        <div class="compatibility-score" id="compatibilityScore">0%</div>
+        <div class="distance" id="matchDistance">Calculating suffering proximity...</div>
+        <p id="distanceSubtext">Opposites repel, but unfortunately you live close.</p>
+        
+        <div class="user-cards" id="userCards"></div>
+        
+        <div class="cupid-commentary" id="cupidCommentary">
+          Cupid is calculating your perfect mismatch...
+        </div>
+        
+        <div class="action-buttons">
+          <button class="btn" id="matchBtn">Match Them</button>
+          <button class="btn" id="begBtn">Beg Cupid to Undo 😭</button>
+          <button class="btn" id="cryBtn">Cry Silently</button>
+        </div>
+        
+        <button class="btn" onclick="showAllProfiles()">View Other Disasters</button>
+        <button class="btn" onclick="restartApp()">Try Again (Glutton for Punishment)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div id="profileContent"></div>
+    </div>
+  </div>
+
+  <!-- Custom Alert -->
+  <div id="customAlert" class="custom-alert">
+    <div class="alert-content">
+      <div class="alert-icon" id="alertIcon">💔</div>
+      <div class="alert-title" id="alertTitle">Alert</div>
+      <div class="alert-message" id="alertMessage">Message</div>
+      <button class="btn" onclick="closeAlert()">Accept My Fate</button>
+    </div>
+  </div>
+
+  <script>
+    let currentQuestion = 0;
+    let userAnswers = {};
+    let userData = {};
+    let currentMatch = {};
+    let allProfiles = [];
+    let visitCount = 0;
+
+    const questions = [
+      { id: 'social', text: 'Are you more of an...', options: ['Introvert', 'Extrovert'] },
+      { id: 'relationship', text: 'Looking for...', options: ['Commitment', 'Situationship'] },
+      { id: 'diet', text: 'Your eating style:', options: ['Vegan', 'Non-vegan'] },
+      { id: 'schedule', text: 'You are a...', options: ['Early bird', 'Night owl'] },
+      { id: 'lifestyle', text: 'Preferred way to spend time:', options: ['Homebody', 'Outgoing'] },
+      { id: 'mindset', text: 'You are more of a...', options: ['Dreamer', 'Realist'] },
+      { id: 'planning', text: 'Your approach to life:', options: ['Planner', 'Go with the flow'] },
+      { id: 'pizza', text: 'Pineapple on pizza?', options: ['Yes', 'No'] },
+      { id: 'chaos', text: 'Do you prefer chaos over calm?', options: ['Yes', 'No'] }
+    ];
+
+    const maleNames = ['Brad', 'Chad', 'Tyler', 'Jake', 'Connor', 'Hunter', 'Brayden', 'Mason'];
+    const femaleNames = ['Ashley', 'Brittany', 'Madison', 'Taylor', 'Kayla', 'Jessica', 'Amanda', 'Sarah'];
+    const nonBinaryNames = ['Alex', 'Jordan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Sage', 'River'];
+
+    const avatarColors = ['#ff6b9d', '#c44569', '#f8b500', '#00d2d3', '#ff5722', '#9c27b0', '#3f51b5', '#4caf50'];
+
+    function startTest() {
+      const name = document.getElementById('userName').value.trim();
+      const gender = document.getElementById('userGender').value;
+      
+      if (!name || !gender) {
+        showCustomAlert('Oops!', 'Please fill in all fields before proceeding to your doom!', '😅');
+        return;
+      }
+      
+      userData = { name, gender };
+      visitCount++;
+      
+      // Check if user is seeking commitment and returning
+      if (visitCount > 1) {
+        const warningDiv = document.createElement('div');
+        warningDiv.className = 'warning-box';
+        warningDiv.innerHTML = visitCount > 2 ? 
+          `${name}, you're back AGAIN?! 😱 Dump them soon or regret later! This is getting desperate...` :
+          `Welcome back, ${name}! 😏 Still haven't learned your lesson from last time?`;
+        document.getElementById('testPage').insertBefore(warningDiv, document.getElementById('testPage').firstChild);
+      }
+      
+      showPage('testPage');
+      displayQuestion();
+    }
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    function displayQuestion() {
+      const question = questions[currentQuestion];
+      const container = document.getElementById('questionsContainer');
+      
+      container.innerHTML = `
+        <div class="question-container">
+          <div class="question-text">${question.text}</div>
+          <div class="options">
+            ${question.options.map(option => 
+              `<div class="option" onclick="selectOption('${question.id}', '${option}')">${option}</div>`
+            ).join('')}
+          </div>
+        </div>
+      `;
+      
+      updateProgress();
+      updateButtons();
+    }
+
+    function selectOption(questionId, option) {
+      userAnswers[questionId] = option;
+      
+      // Visual feedback
+      document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+      event.target.classList.add('selected');
+      
+      updateButtons();
+    }
+
+    function updateProgress() {
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    }
+
+    function updateButtons() {
+      const currentQuestionId = questions[currentQuestion].id;
+      const isAnswered = userAnswers[currentQuestionId];
+      
+      document.getElementById('prevBtn').style.display = currentQuestion > 0 ? 'inline-block' : 'none';
+      document.getElementById('nextBtn').style.display = currentQuestion < questions.length - 1 ? 'inline-block' : 'none';
+      document.getElementById('submitBtn').style.display = currentQuestion === questions.length - 1 ? 'inline-block' : 'none';
+      
+      document.getElementById('nextBtn').disabled = !isAnswered;
+      document.getElementById('submitBtn').disabled = !isAnswered;
+    }
+
+    function nextQuestion() {
+      if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        displayQuestion();
+      }
+    }
+
+    function previousQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        displayQuestion();
+      }
+    }
+
+    function generateMatch() {
+      // Create opposite preferences for maximum incompatibility
+      const oppositeAnswers = {};
+      Object.keys(userAnswers).forEach(key => {
+        const question = questions.find(q => q.id === key);
+        const userChoice = userAnswers[key];
+        oppositeAnswers[key] = question.options.find(opt => opt !== userChoice);
+      });
+
+      // Select appropriate name pool based on user's gender preference
+      let namePool;
+      if (userData.gender === 'male') namePool = femaleNames;
+      else if (userData.gender === 'female') namePool = maleNames;
+      else namePool = nonBinaryNames;
+
+      const matchName = namePool[Math.floor(Math.random() * namePool.length)];
+      const matchAge = Math.floor(Math.random() * 15) + 22; // 22-36 years old
+      const userAge = Math.floor(Math.random() * 15) + 22;
+
+      return {
+        user1: {
+          name: userData.name,
+          age: userAge,
+          gender: userData.gender,
+          answers: userAnswers,
+          avatar: avatarColors[Math.floor(Math.random() * avatarColors.length)]
+        },
+        user2: {
+          name: matchName,
+          age: matchAge,
+          gender: userData.gender === 'male' ? 'female' : userData.gender === 'female' ? 'male' : 'non-binary',
+          answers: oppositeAnswers,
+          avatar: avatarColors[Math.floor(Math.random() * avatarColors.length)]
+        }
+      };
+    }
+
+    function calculateCompatibility(answers1, answers2) {
+      let matches = 0;
+      const totalQuestions = Object.keys(answers1).length;
+      
+      Object.keys(answers1).forEach(key => {
+        if (answers1[key] === answers2[key]) matches++;
+      });
+      
+      return Math.round((matches / totalQuestions) * 100);
+    }
+
+    function getDistanceByCompatibility(compatibility) {
+      if (compatibility <= 20) return ['2 meters', 'Next door neighbors', 'Same apartment building'];
+      if (compatibility <= 40) return ['50 meters', 'Same street', 'Next block over'];
+      if (compatibility <= 60) return ['500 meters', 'Same neighborhood', 'Walking distance'];
+      return ['5 km', 'Same city district', 'Short bike ride away'];
+    }
+
+    function generateCommentary(user1, user2, compatibility) {
+      const commentaries = [
+        `${user1.answers.diet === 'Vegan' ? 'Vegan' : 'Bacon enthusiast'} meets ${user2.answers.diet === 'Vegan' ? 'vegan' : 'meat lover'}. Their dinner dates will be legendary disasters.`,
+        `${user1.answers.social} meets ${user2.answers.social.toLowerCase()}. One will drain the other's social battery instantly.`,
+        `${user1.answers.schedule} paired with ${user2.answers.schedule.toLowerCase()}. Their sleep schedules will never align.`,
+        `${user1.answers.relationship.toLowerCase()} seeker meets ${user2.answers.relationship.toLowerCase()} enthusiast. This won't end well.`,
+        `${user1.answers.planning} meets ${user2.answers.planning.toLowerCase()}. Chaos will ensue at every shared event.`
+      ];
+      
+      return commentaries[Math.floor(Math.random() * commentaries.length)];
+    }
+
+    function getUserTrait(answers) {
+      const traits = {
+        'Vegan': 'Judges your lunch choices everywhere',
+        'Non-vegan': 'Will eat anything that moves',
+        'Introvert': 'Hides from social gatherings',
+        'Extrovert': 'Talks to strangers in elevators',
+        'Early bird': 'Annoyingly cheerful at 6 AM',
+        'Night owl': 'Vampire-like tendencies',
+        'Homebody': 'Netflix is their best friend',
+        'Outgoing': 'Has FOMO about everything',
+        'Dreamer': 'Lives in an alternate reality',
+        'Realist': 'Crushes dreams professionally',
+        'Planner': 'Has spreadsheets for everything',
+        'Go with the flow': 'Chaos incarnate'
+      };
+      
+      const randomKey = Object.keys(answers)[Math.floor(Math.random() * Object.keys(answers).length)];
+      return traits[answers[randomKey]] || 'Mysteriously problematic';
+    }
+
+    function calculateResults() {
+      const match = generateMatch();
+      currentMatch = match;
+      
+      // Store in profiles array
+      allProfiles.push(match.user1, match.user2);
+      
+      const compatibility = calculateCompatibility(match.user1.answers, match.user2.answers);
+      const distances = getDistanceByCompatibility(compatibility);
+      const selectedDistance = distances[Math.floor(Math.random() * distances.length)];
+      const commentary = generateCommentary(match.user1, match.user2, compatibility);
+      
+      // Update results page
+      document.getElementById('compatibilityScore').textContent = compatibility + '%';
+      document.getElementById('matchDistance').textContent = selectedDistance;
+      document.getElementById('cupidCommentary').textContent = commentary;
+      
+      // Generate user cards
+      const userCardsHTML = `
+        <div class="user-card" onclick="showProfile('${match.user1.name}')">
+          <div class="avatar" style="background: ${match.user1.avatar}">
+            ${match.user1.name[0]}
+          </div>
+          <div class="user-name">
+            ${match.user1.name}
+            ${match.user1.answers.relationship === 'Commitment' ? '<span class="commitment-badge">💍 Serious</span>' : ''}
+          </div>
+          <div class="user-age">${match.user1.age} years old</div>
+          <div class="user-trait">${getUserTrait(match.user1.answers)}</div>
+        </div>
+        <div class="user-card" onclick="showProfile('${match.user2.name}')">
+          <div class="avatar" style="background: ${match.user2.avatar}">
+            ${match.user2.name[0]}
+          </div>
+          <div class="user-name">
+            ${match.user2.name}
+            ${match.user2.answers.relationship === 'Commitment' ? '<span class="commitment-badge">💍 Serious</span>' : ''}
+          </div>
+          <div class="user-age">${match.user2.age} years old</div>
+          <div class="user-trait">${getUserTrait(match.user2.answers)}</div>
+        </div>
+      `;
+      
+      document.getElementById('userCards').innerHTML = userCardsHTML;
+      
+      showPage('resultsPage');
+    }
+
+    function showProfile(name) {
+      const profile = allProfiles.find(p => p.name === name);
+      if (!profile) return;
+      
+      const modal = document.getElementById('profileModal');
+      const content = document.getElementById('profileContent');
+      
+      const answerLabels = {
+        social: 'Social Style',
+        relationship: 'Looking For',
+        diet: 'Diet',
+        schedule: 'Schedule',
+        lifestyle: 'Lifestyle',
+        mindset: 'Mindset',
+        planning: 'Planning Style',
+        pizza: 'Pineapple Pizza',
+        chaos: 'Chaos Preference'
+      };
+      
+      content.innerHTML = `
+        <div class="user-card" style="margin-bottom: 20px;">
+          <div class="avatar" style="background: ${profile.avatar}; width: 100px; height: 100px; font-size: 2.5em;">
+            ${profile.name[0]}
+          </div>
+          <div class="user-name" style="font-size: 1.5em;">
+            ${profile.name}
+            ${profile.answers.relationship === 'Commitment' ? '<span class="commitment-badge">💍 Serious</span>' : ''}
+          </div>
+          <div class="user-age" style="font-size: 1.1em;">${profile.age} years old</div>
+          <div class="user-trait" style="margin-top: 10px;">${getUserTrait(profile.answers)}</div>
+        </div>
+        <div class="profile-details">
+          <h3 style="color: #c44569; margin-bottom: 15px;">Compatibility Preferences:</h3>
+          ${Object.keys(profile.answers).map(key => `
+            <div class="detail-row">
+              <span class="detail-label">${answerLabels[key]}:</span>
+              <span>${profile.answers[key]}</span>
+            </div>
+          `).join('')}
+        </div>
+        <p style="font-style: italic; color: #666; margin-top: 20px;">
+          "${profile.name} is a ${profile.answers.social.toLowerCase()} ${profile.answers.schedule.toLowerCase()} who ${profile.answers.relationship === 'Commitment' ? 'wants something serious' : 'keeps things casual'}. 
+          ${profile.answers.diet === 'Vegan' ? 'Plants only!' : 'Omnivore life!'} 
+          ${profile.answers.chaos === 'Yes' ? 'Thrives in chaos.' : 'Needs calm and order.'}"
+        </p>
+      `;
+      
+      modal.style.display = 'block';
+    }
+
+    function showAllProfiles() {
+      const modal = document.getElementById('profileModal');
+      const content = document.getElementById('profileContent');
+      
+      content.innerHTML = `
+        <h2 style="color: #c44569; margin-bottom: 20px;">All Available Disasters</h2>
+        <div class="profile-grid">
+          ${allProfiles.map(profile => `
+            <div class="user-card" onclick="showProfile('${profile.name}')" style="cursor: pointer;">
+              <div class="avatar" style="background: ${profile.avatar}">
+                ${profile.name[0]}
+              </div>
+              <div class="user-name">
+                ${profile.name}
+                ${profile.answers.relationship === 'Commitment' ? '<span class="commitment-badge">💍</span>' : ''}
+              </div>
+              <div class="user-age">${profile.age} years old</div>
+              <div class="user-trait">${getUserTrait(profile.answers)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      modal.style.display = 'block';
+    }
+
+    function showCustomAlert(title, message, icon) {
+      const alert = document.getElementById('customAlert');
+      document.getElementById('alertTitle').textContent = title;
+      document.getElementById('alertMessage').textContent = message;
+      document.getElementById('alertIcon').textContent = icon;
+      alert.style.display = 'flex';
+    }
+
+    function closeAlert() {
+      document.getElementById('customAlert').style.display = 'none';
+    }
+
+    function closeModal() {
+      document.getElementById('profileModal').style.display = 'none';
+    }
+
+    function restartApp() {
+      currentQuestion = 0;
+      userAnswers = {};
+      userData = {};
+      currentMatch = {};
+      document.getElementById('userName').value = '';
+      document.getElementById('userGender').value = '';
+      
+      // Remove warning boxes
+      document.querySelectorAll('.warning-box').forEach(box => box.remove());
+      
+      showPage('welcomePage');
+    }
+
+    // Initialize event listeners when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Results page button event listeners
+      setTimeout(() => {
+        const matchBtn = document.getElementById('matchBtn');
+        const begBtn = document.getElementById('begBtn');
+        const cryBtn = document.getElementById('cryBtn');
+        
+        if (matchBtn) {
+          matchBtn.addEventListener('click', function() {
+            showCustomAlert('Match Confirmed!', `${currentMatch.user1?.name || 'You'} and ${currentMatch.user2?.name || 'your match'} are now doomed to awkward encounters! Their suffering has officially begun.`, '💔');
+          });
+        }
+
+        if (begBtn) {
+          begBtn.addEventListener('click', function() {
+            showCustomAlert('Request Denied!', 'Cupid laughs maniacally. Your fate is sealed! No backsies in the game of mischievous love.', '😈');
+          });
+        }
+
+        if (cryBtn) {
+          cryBtn.addEventListener('click', function() {
+            const cryMessages = [
+              'Your tears only fuel Cupid\'s mischief! 😭',
+              'Crying won\'t change your terrible match! 💧',
+              'Save those tears for your first awkward date! 😢',
+              'Cupid recommends tissues and accepting your fate! 🤧'
+            ];
+            const randomMessage = cryMessages[Math.floor(Math.random() * cryMessages.length)];
+            showCustomAlert('Emotional Breakdown Detected!', randomMessage, '😭');
+          });
+        }
+      }, 100);
+    });
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('profileModal');
+      const alert = document.getElementById('customAlert');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+      if (event.target === alert) {
+        alert.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>
